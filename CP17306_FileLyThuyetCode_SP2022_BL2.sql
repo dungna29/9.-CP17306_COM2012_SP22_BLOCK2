@@ -107,3 +107,122 @@ DROP TABLE ChucVu
 ALTER TABLE ChucVu ADD ColTest INT -- Thêm cột và có thể thêm nhiều cột thông qua dấu ,
 
 ALTER TABLE ChucVu DROP COLUMN ColTest -- Xóa cột
+
+ALTER TABLE ChucVu ALTER COLUMN ColTest VARCHAR(MAX)-- Sửa kiểu dữ liệu của cột
+
+/*
+	CÂU LỆNH 1.8: CONSTRAINT
+	Câu lệnh Thêm ràng buộc Constraint (Ràng buộc là các qui tắc để hạn chế các giá trị được lưu trữ vào bảng. [DungNA29]
+	Các ràng buộc được sử dụng để giới hạn loại dữ liệu có thể đi vào bảng. Điều này đảm bảo tính chính xác và độ tin cậy của dữ liệu trong bảng. Nếu có bất kỳ vi phạm nào giữa ràng buộc và hành động dữ liệu, hành động đó sẽ bị hủy bỏ)
+	Ràng buộc NOT NULL trong SQL: Bảo đảm một cột không thể có giá trị NULL.
+	Ràng buộc DEFAULT trong SQL: Cung cấp một giá trị mặc định cho cột khi không được xác định.
+	Ràng buộc UNIQUE trong SQL: Bảo đảm tất cả giá trị trong một cột là khác nhau.
+	Ràng buộc PRIMARY Key trong SQL: Mỗi hàng/bản ghi được nhận diện một cách duy nhất trong một bảng.
+	Ràng buộc FOREIGN Key trong SQL: Mỗi hàng/bản ghi được nhận diện một cách duy nhất trong bất kỳ bảng nào.
+	Ràng buộc CHECK trong SQL: Bảo đảm tất cả giá trị trong một cột thỏa mãn các điều kiện nào đó.
+	Ràng buộc INDEX trong SQL: Sử dụng để tạo và lấy dữ liệu từ Database một cách nhanh chóng. 
+	CREATE TABLE table_name (
+		column1 datatype constraint, Ràng buộc xuất hiện sau kiểu dữ liệu
+		column2 datatype constraint,
+		column3 datatype constraint,
+		....
+	);
+*/
+-- Tạo bảng cửa hàng
+CREATE TABLE CuaHang(
+Id INT PRIMARY KEY IDENTITY,
+Ma VARCHAR(20) UNIQUE,
+Ten NVARCHAR(50) DEFAULT NULL,
+DiaChi NVARCHAR(100) DEFAULT NULL,
+ThanhPho NVARCHAR(20) DEFAULT NULL,
+QuocGia NVARCHAR(30) DEFAULT NULL,
+)
+/*
+	CÂU LỆNH 1.9: FOREIGN KEY Constraint
+	Tại quan hệ và chỉ định khóa ngoại cho bảng
+	-- Cách 1
+	 <Tên cột>  <kiểu dữ liệu> FOREIGN KEY REFERENCES <Tên bảng khóa chính>(<Tên khóa chính>)
+	-- Cách 2
+	CONSTRAINT <Tên khóa ngoại do mình đặt> FOREIGN KEY (<Tên FK trong bảng>)
+*/
+--Cách 1
+CREATE TABLE NhanVien(
+Id INT PRIMARY KEY IDENTITY,
+Ma VARCHAR(20) UNIQUE,
+Ten NVARCHAR(50) DEFAULT NULL,
+TenDem NVARCHAR(50) DEFAULT NULL,
+Ho NVARCHAR(50) DEFAULT NULL,
+GioiTinh NVARCHAR(10) DEFAULT NULL,
+NgaySinh DATE DEFAULT NULL,
+DiaChi NVARCHAR(100) DEFAULT NULL,
+Sdt VARCHAR(20) DEFAULT NULL,
+IdCH INT FOREIGN KEY REFERENCES CuaHang(Id),
+IdCV INT FOREIGN KEY REFERENCES ChucVu(Id),
+IdGuiBaoCao INT FOREIGN KEY REFERENCES NhanVien(Id),
+TrangThai INT DEFAULT 0
+)
+-- Cách 2
+CREATE TABLE NhanVien(
+Id INT PRIMARY KEY IDENTITY,
+Ma VARCHAR(20) UNIQUE,
+Ten NVARCHAR(50) DEFAULT NULL,
+TenDem NVARCHAR(50) DEFAULT NULL,
+Ho NVARCHAR(50) DEFAULT NULL,
+GioiTinh NVARCHAR(10) DEFAULT NULL,
+NgaySinh DATE DEFAULT NULL,
+DiaChi NVARCHAR(100) DEFAULT NULL,
+Sdt VARCHAR(20) DEFAULT NULL,
+IdCH INT,
+IdCV INT,
+IdGuiBaoCao INT,
+TrangThai INT DEFAULT 0
+CONSTRAINT FK_CUAHANG FOREIGN KEY(IdCH) REFERENCES CuaHang(Id),
+CONSTRAINT FK_CHUCVU FOREIGN KEY(IdCV) REFERENCES ChucVu(Id),
+CONSTRAINT FK_GUIBAOCAO FOREIGN KEY(IdGuiBaoCao) REFERENCES NhanVien(Id)
+)
+-- Cách 3: Sử dụng câu lệnh ALTER để khai báo khóa phụ, khi tạo bảng thì không cần các mối quan hệ ban đầu
+CREATE TABLE NhanVien(
+Id INT PRIMARY KEY IDENTITY,
+Ma VARCHAR(20) UNIQUE,
+Ten NVARCHAR(50) DEFAULT NULL,
+TenDem NVARCHAR(50) DEFAULT NULL,
+Ho NVARCHAR(50) DEFAULT NULL,
+GioiTinh NVARCHAR(10) DEFAULT NULL,
+NgaySinh DATE DEFAULT NULL,
+DiaChi NVARCHAR(100) DEFAULT NULL,
+Sdt VARCHAR(20) DEFAULT NULL,
+IdCH INT,
+IdCV INT,
+IdGuiBaoCao INT,
+TrangThai INT DEFAULT 0
+)
+-- Mối quan hệ thông qua câu lệnh ALTER
+-- NhanVien - CuaHang
+ALTER TABLE NhanVien
+ADD FOREIGN KEY(IdCH) REFERENCES CuaHang(Id)
+
+-- NhanVien - ChucVu
+ALTER TABLE NhanVien
+ADD FOREIGN KEY(IdCV) REFERENCES ChucVu(Id)
+
+-- NhanVien - NguoiGuiBaoCao
+ALTER TABLE NhanVien
+ADD FOREIGN KEY(IdGuiBaoCao) REFERENCES NhanVien(Id)
+
+/*
+	CÂU LỆNH 2.0: INSERT INTO 
+	Thêm dữ liệu vào bảng và có thể viết theo 2 cách
+	-- Cách 1: Chỉ định cột và giá trị sẽ được chèn
+	 INSERT INTO table_name (column1, column2, column3, ...)
+	 VALUES (value1, value2, value3, ...);
+	-- Cách 2: đảm bảo thứ tự của các giá trị theo cùng thứ tự với các cột trong bảng
+	INSERT INTO table_name
+	VALUES (value1, value2, value3, ...);
+*/
+INSERT INTO ChucVu(Ma,Ten)
+VALUES('TP',N'Trưởng Phòng'),
+		('NV',N'Nhân Viên')
+
+INSERT INTO ChucVu
+VALUES('LC',N'Lao Công'),
+		('BV',N'Bảo Vệ')
