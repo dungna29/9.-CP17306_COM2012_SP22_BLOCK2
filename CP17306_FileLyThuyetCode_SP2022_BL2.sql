@@ -226,3 +226,153 @@ VALUES('TP',N'Trưởng Phòng'),
 INSERT INTO ChucVu
 VALUES('LC',N'Lao Công'),
 		('BV',N'Bảo Vệ')
+
+/*
+	CÂU LỆNH 2.1: SELECT   
+	Câu lệnh SELECT được sử dụng để chọn dữ liệu từ cơ sở dữ liệu.
+	Dữ liệu trả về được lưu trữ trong một bảng kết quả, được gọi là tập kết quả.
+	-- Cú pháp: Ở đây, column1, column2, ... là tên trường của bảng mà bạn muốn chọn dữ liệu
+	SELECT column1, column2, ...
+	FROM table_name;
+	SELECT * FROM table_name;
+*/
+SELECT * FROM SanPham
+SELECT Ma,Ten FROM SanPham
+/*
+	CÂU LỆNH 2.2: Aliases   
+	Bí danh SQL được sử dụng để đặt tên tạm thời cho một bảng hoặc một cột trong bảng.
+	Bí danh thường được sử dụng để làm cho tên cột dễ đọc hơn.
+	Bí danh chỉ tồn tại trong thời gian truy vấn.
+	-- Cú pháp cột bí danh:
+	SELECT column_name AS alias_name
+	FROM table_name;
+	-- Cú pháp bảng bí danh:
+	SELECT column_name(s)
+	FROM table_name AS alias_name;
+*/
+SELECT Ma AS N'Mã Nhân Viên',Ten AS N'Tên NV' FROM NhanVien
+
+/*
+	CÂU LỆNH 2.2: SELECT DISTINCT   
+	Câu lệnh SELECT DISTINCT chỉ được sử dụng để trả về các giá trị riêng biệt (khác nhau).
+	tên trong một bảng, một cột thường chứa nhiều giá trị trùng lặp; và đôi khi bạn chỉ muốn liệt kê các giá trị khác nhau (riêng biệt).
+	
+	-- Cú pháp cột bí danh:
+	SELECT DISTINCT column1, column2, ...
+	FROM table_name;
+*/
+SELECT DISTINCT Ten FROM NHANVIEN
+
+/*
+	CÂU LỆNH 2.3: SELECT TOP Clause  
+	Mệnh đề SELECT TOP được sử dụng để chỉ định số lượng bản ghi trả về.
+	Mệnh đề SELECT TOP hữu ích trên các bảng lớn với hàng nghìn bản ghi. Trả lại một số lượng lớn bản ghi có thể ảnh hưởng đến hiệu suất.
+	
+	-- Cú pháp: 
+	SELECT TOP number|percent column_name(s)
+	FROM table_name
+	WHERE condition;
+*/
+SELECT TOP 2 * FROM NhanVien
+SELECT TOP 50 PERCENT * FROM NhanVien
+/* 
+	CÂU LỆNH 2.4:WHERE 
+	- Được sử dụng để lọc các bản ghi. 
+	- Mệnh đề WHERE được sử dụng để chỉ trích xuất những bản ghi đáp ứng một điều kiện cụ thể. [DungNA29]
+	-- Cú pháp:
+	SELECT column1, column2, ...
+	FROM table_name
+	WHERE condition;
+	=	Equal - So sánh	
+	>	Greater than - Lớn hơn	
+	<	Less than - Nhỏ hơn 	
+	>=	Greater than or equal - Lớn hơn hoặc bằng	
+	<=	Less than or equal - Nhỏ hơn hoặc bằng	
+	<>	Not equal. Note: In some versions of SQL this operator may be written as !=	 -  Khác
+	BETWEEN	Between a certain range	 - Trong Khoảng  - Sẽ Giải thích trong phần riêng
+	LIKE	Search for a pattern	-  Tìm kiếm theo mẫu - Sẽ Giải thích trong phần riêng
+	IN	To specify multiple possible values for a column - Sẽ Giải thích trong phần riêng [DungNA29]
+	Lưu ý: Mệnh đề WHERE không chỉ được sử dụng trong câu lệnh 
+	SELECT, nó còn được sử dụng trong CẬP NHẬT, câu lệnh XÓA, v.v.! [DungNA29]
+*/
+--In ra danh sách các nhân viên nữ ở cửa hàng
+SELECT * FROM NHANVIEN
+WHERE GioiTinh = N'Nữ'
+-- In danh sách những người họ Lê ở cửa hàng
+SELECT * FROM NHANVIEN
+WHERE Ho = N'Lê' AND GioiTinh = N'Nữ'
+
+/*
+	CÂU LỆNH 2.5: DELETE  
+	Câu lệnh DELETE được sử dụng để xóa các bản ghi hiện có trong bảng.
+	-- Cú pháp: 
+	DELETE FROM table_name WHERE condition;
+	-- Lưu ý: Hãy cẩn thận khi xóa các bản ghi trong bảng! Lưu ý mệnh đề WHERE trong câu lệnh DELETE. 
+	Mệnh đề WHERE chỉ định (các) bản ghi nào nên được xóa. Nếu bạn bỏ qua mệnh đề WHERE, 
+	tất cả các bản ghi trong bảng sẽ bị xóa!
+*/
+DELETE FROM NhanVienz -- Xóa tất cả data bên trong bảng
+DELETE FROM NhanVien WHERE Ma = 'Manv'
+
+/*
+	CÂU LỆNH 2.5: UPDATE   
+	Câu lệnh UPDATE được sử dụng để sửa đổi các bản ghi hiện có trong bảng.
+	-- Cú pháp: 
+	UPDATE table_name
+	SET column1 = value1, column2 = value2, ...
+	WHERE condition;
+	-- Lưu ý: Hãy cẩn thận khi cập nhật các bản ghi trong bảng! Lưu ý mệnh đề WHERE trong câu lệnh UPDATE. 
+	Mệnh đề WHERE chỉ định (các) bản ghi sẽ được cập nhật. Nếu bạn bỏ qua mệnh đề WHERE, 
+	tất cả các bản ghi trong bảng sẽ được cập nhật!
+*/
+UPDATE NHANVIEN
+SET Ho = N'Nguyễn',TenDem = N'Như'
+WHERE Ma = 'NV16'
+SELECT * FROM NHANVIEN WHERE Ma = 'NV16'
+
+/*
+	CÂU LỆNH 2.6: TOÁN TỬ LIKE   
+	Toán tử LIKE được sử dụng trong mệnh đề WHERE để tìm kiếm một mẫu cụ thể trong một cột.
+	Có hai ký tự đại diện thường được sử dụng cùng với toán tử LIKE:
+	% - Dấu phần trăm đại diện cho không, một hoặc nhiều ký tự
+	_ - Dấu gạch dưới thể hiện một ký tự
+		LIKE Operator					Description
+	WHERE CustomerName LIKE 'a%'	Finds any values that start with "a" - Tìm bất kỳ giá trị nào bắt đầu bằng "a"
+	WHERE CustomerName LIKE '%a'	Finds any values that end with "a" - Tìm bất kỳ giá trị nào kết thúc bằng "a"
+	WHERE CustomerName LIKE '%or%'	Finds any values that have "or" in any position - Tìm bất kỳ giá trị nào có "or" ở bất kỳ vị trí nào
+	WHERE CustomerName LIKE '_r%'	Finds any values that have "r" in the second position - Tìm bất kỳ giá trị nào có "r" ở vị trí thứ hai
+	WHERE CustomerName LIKE 'a_%'	Finds any values that start with "a" and are at least 2 characters in length - Tìm bất kỳ giá trị nào bắt đầu bằng "a" và có ít nhất 2 ký tự
+	WHERE CustomerName LIKE 'a__%'	Finds any values that start with "a" and are at least 3 characters in length - Tìm bất kỳ giá trị nào bắt đầu bằng "a" và có ít nhất 3 ký tự
+	WHERE ContactName LIKE 'a%o'	Finds any values that start with "a" and ends with "o" - Tìm bất kỳ giá trị nào bắt đầu bằng "a" và kết thúc bằng "o"
+	
+	-- Cú pháp: 
+	SELECT column1, column2, ...
+	FROM table_name
+	WHERE columnN LIKE pattern;	
+*/
+SELECT * FROM NHANVIEN WHERE Ten LIKE '%n%'
+-- Truy vấn những người sử dụng số điện thoại mạng Việt Teo
+-- Truy vấn những người sử dụng số điện thoại có đuôi 37
+
+/*
+	CÂU LỆNH 2.7: TOÁN TỬ IN  
+	Toán tử IN cho phép bạn chỉ định nhiều giá trị trong mệnh đề WHERE.
+	Toán tử IN là cách viết tắt của nhiều điều kiện OR.
+	-- Cú pháp:
+	SELECT column_name(s)
+	FROM table_name
+	WHERE column_name IN (value1, value2, ...);
+	HOẶC
+	SELECT column_name(s)
+	FROM table_name
+	WHERE column_name IN (SELECT STATEMENT);
+*/
+SELECT * FROM NHANVIEN
+WHERE Ten = N'Tiến' OR Ten = N'Tồn'
+
+SELECT * FROM NHANVIEN
+WHERE Ten IN (N'Tiến',N'Tồn')
+
+-- Lấy dữ liệu những đang làm tại các cauwr hàng Hà Nội
+SELECT * FROM NHANVIEN
+WHERE IdCH IN(SELECT ID FROM CUAHANG WHERE ThanhPho=N'Hà Nội')
