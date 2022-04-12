@@ -375,4 +375,173 @@ WHERE Ten IN (N'Tiến',N'Tồn')
 
 -- Lấy dữ liệu những đang làm tại các cauwr hàng Hà Nội
 SELECT * FROM NHANVIEN
-WHERE IdCH IN(SELECT ID FROM CUAHANG WHERE ThanhPho=N'Hà Nội')
+WHERE IdCH IN (SELECT ID FROM CUAHANG WHERE ThanhPho=N'Hà Nội')
+/*
+	CÂU LỆNH 2.9: TOÁN TỬ SQL AND, OR và NOT Operators(Toán tử)  và Toán tử BETWEEN
+	Mệnh đề WHERE có thể được kết hợp với các toán tử AND, OR và NOT.
+	Toán tử AND và OR được sử dụng để lọc các bản ghi dựa trên nhiều hơn một điều kiện:
+	Toán tử AND hiển thị một bản ghi nếu tất cả các điều kiện được phân tách bằng AND đều ĐÚNG.
+	Toán tử OR hiển thị một bản ghi nếu bất kỳ điều kiện nào được phân tách bởi OR là TRUE.
+	Toán tử NOT hiển thị một bản ghi nếu (các) điều kiện KHÔNG ĐÚNG.
+	-- Cú pháp:
+	AND Syntax
+		SELECT column1, column2, ...
+		FROM table_name
+		WHERE condition1 AND condition2 AND condition3 ...;
+	
+	OR Syntax
+		SELECT column1, column2, ...
+		FROM table_name
+		WHERE condition1 OR condition2 OR condition3 ...;
+	
+	NOT Syntax
+		SELECT column1, column2, ...
+		FROM table_name
+		WHERE NOT condition;
+		
+		Toán tử GIỮA chọn các giá trị trong một phạm vi nhất định. Các giá trị có thể là số, văn bản hoặc ngày tháng.
+		Toán tử BETWEEN được bao gồm: giá trị bắt đầu và kết thúc được bao gồm. 
+	BETWEEN Syntax
+		SELECT column_name(s)
+		FROM table_name
+		WHERE column_name BETWEEN value1 AND value2;
+*/
+-- Lấy ra các nhân viên giới tính là Nữ và Họ Nguyễn
+SELECT * FROM NhanVien
+WHERE GioiTinh = N'Nữ' AND Ho = N'Nguyễn'
+-- Lấy các sản phẩm có năm bảo hành từ 2 đến 3 năm ở bảng Chi Tiết SP
+SELECT * FROM ChiTietSP
+WHERE NamBH >= 2 AND NamBH <=3
+
+SELECT * FROM ChiTietSP
+WHERE NamBH BETWEEN 2 AND 3
+
+/*
+	CÂU LỆNH 3.0: TOÁN TỬ IN  COUNT(), AVG() and SUM(),MIN() and MAX() Functions	
+	
+	Hàm COUNT () trả về số hàng phù hợp với tiêu chí được chỉ định.
+	Hàm AVG () trả về giá trị trung bình của một cột số.
+	Hàm SUM () trả về tổng tổng của một cột số.
+	Hàm MIN () trả về giá trị nhỏ nhất của cột đã chọn.
+	Hàm MAX () trả về giá trị lớn nhất của cột đã chọn.
+	-- Cú pháp:
+	Cú pháp COUNT ()
+		SELECT COUNT(column_name)
+		FROM table_name
+		WHERE condition;
+	Cú pháp AVG ()
+		SELECT AVG(column_name)
+		FROM table_name
+		WHERE condition;
+	Cú pháp SUM ()
+		SELECT SUM(column_name)
+		FROM table_name
+		WHERE condition;
+	Cú pháp MIN ()
+		SELECT MIN(column_name)
+		FROM table_name
+		WHERE condition;
+	Cú pháp MAX ()
+		SELECT MAX(column_name)
+		FROM table_name
+		WHERE condition;
+*/
+-- Lấy ra số lượng nhân viên Nữ ở cửa hàng FPT SHOP
+SELECT COUNT(GioiTinh) FROM NhanVien
+WHERE GioiTinh = N'Nữ'
+-- Lấy ra số lượng nhân viên nữ làm ở cửa hàng có CH01
+SELECT COUNT(GioiTinh) AS N'Số lượng nhân viên nữ' FROM NhanVien
+WHERE GioiTinh = N'Nữ'AND IdCH = (SELECT Id FROM CuaHang WHERE Ma = 'CH1')
+-- AVG() Tính trung bình giá nhập Laptop tại cửa hàng?
+SELECT AVG(GiaNhap) FROM ChiTietSP
+WHERE IdSP = (SELECT Id FROM SanPham WHERE Ten = 'LapTop')
+
+/*
+	CÂU LỆNH 3.1: ORDER BY	
+	
+	Từ khóa ORDER BY được sử dụng để sắp xếp tập hợp kết quả theo thứ tự tăng dần hoặc giảm dần.
+	Từ khóa ORDER BY sắp xếp các bản ghi theo thứ tự tăng dần theo mặc định. Để sắp xếp các bản ghi theo thứ tự giảm dần, 
+	hãy sử dụng từ khóa DESC.
+	-- Cú pháp:
+	SELECT column1, column2, ...
+	FROM table_name
+	ORDER BY column1, column2, ... ASC|DESC;
+*/
+SELECT * FROM NhanVien ORDER BY Ten -- Sắp xếp ASC tăng tần vì mặc định của ORDER BY là tăng dần.
+SELECT * FROM NhanVien ORDER BY Ten ASC
+SELECT * FROM NhanVien ORDER BY Ten DESC -- Sắp xếp giảm dần
+/*
+	CÂU LỆNH 3.2: GROUP BY	
+	
+	Câu lệnh GROUP BY nhóm các hàng có cùng giá trị thành các hàng tóm tắt, như "tìm số lượng khách hàng ở mỗi quốc gia".
+	Câu lệnh GROUP BY thường được sử dụng với các hàm tổng hợp (COUNT, MAX, MIN, SUM, AVG) để nhóm tập hợp kết quả theo một hoặc nhiều cột.
+	-- Cú pháp:
+	SELECT column_name(s)
+	FROM table_name
+	WHERE condition
+	GROUP BY column_name(s)
+	ORDER BY column_name(s);
+*/
+/*
+	CÂU LỆNH 3.2: GROUP BY	
+	
+	Câu lệnh GROUP BY nhóm các hàng có cùng giá trị thành các hàng tóm tắt, như "tìm số lượng khách hàng ở mỗi quốc gia".
+	Câu lệnh GROUP BY thường được sử dụng với các hàm tổng hợp (COUNT, MAX, MIN, SUM, AVG) để nhóm tập hợp kết quả theo một hoặc nhiều cột.
+	-- Cú pháp:
+	SELECT column_name(s)
+	FROM table_name
+	WHERE condition
+	GROUP BY column_name(s)
+	ORDER BY column_name(s);
+*/
+-- Tính tổng tiền trên từng hóa đơn khách hàng mua bên bảng chi tiết
+SELECT IdHoaDon,SUM(SoLuong) AS N'Tổng SP khách mua trong hóa đơn' ,SUM(SoLuong*DonGia) AS N'Tổng Tiền' FROM HoaDonChiTiet
+GROUP BY IdHoaDon
+
+/*
+	CÂU LỆNH 3.3: MỆNH ĐỀ HAVING - Mệnh đề HAVING đã được thêm vào SQL vì từ khóa WHERE không thể được sử dụng với các hàm tổng hợp. 	
+	
+	Mệnh đề HAVING đã được thêm vào SQL vì không thể sử dụng từ khóa WHERE với các hàm tổng hợp.
+	-- Cú pháp:
+	SELECT column_name(s)
+	FROM table_name
+	WHERE condition
+	GROUP BY column_name(s)
+	HAVING condition
+	ORDER BY column_name(s);
+*/
+-- In ra danh sách các cửa hàng có số lượng được mở tại TP đó >3
+SELECT ThanhPho,COUNT(ThanhPho) FROM CuaHang
+GROUP BY ThanhPho
+HAVING COUNT(ThanhPho) > 3
+
+/*
+	CÂU LỆNH 3.4: JOIN dùng để kết hợp từ 2 bảng trở lên dựa trên một cột có liên quan chúng lại với nhau  	
+	
+	(INNER) JOIN: Trả về các bản ghi có giá trị khớp trong cả hai bảng - JOIN mặc định chính là INNER JOIN
+	LEFT (OUTER) JOIN: Trả về tất cả các bản ghi từ bảng bên trái và các bản ghi khớp từ bảng bên phải
+	RIGHT (OUTER) JOIN: Trả về tất cả các bản ghi từ bảng bên phải và các bản ghi khớp từ bảng bên trái
+	FULL (OUTER) JOIN:  Trả về tất cả các bản ghi khi có trong bảng bên trái hoặc bên phải
+	-- Cú pháp:
+	INNER JOIN Syntax
+		SELECT column_name(s)
+		FROM table1
+		INNER JOIN table2
+		ON table1.column_name = table2.column_name;
+	LEFT JOIN Syntax
+		SELECT column_name(s)
+		FROM table1
+		LEFT JOIN table2
+		ON table1.column_name = table2.column_name;
+	RIGHT JOIN Syntax
+		SELECT column_name(s)
+		FROM table1
+		RIGHT JOIN table2
+		ON table1.column_name = table2.column_name;
+	Self JOIN Syntax
+		SELECT column_name(s)
+		FROM table1 T1, table1 T2
+		WHERE condition;
+*/
+SELECT SanPham.Ma,SanPham.Ten,ChiTietSP.NamBH,ChiTietSP.SoLuongTon FROM ChiTietSP
+JOIN SanPham ON SanPham.Id =ChiTietSP.IdSP
