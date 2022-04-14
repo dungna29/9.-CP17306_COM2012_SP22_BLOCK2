@@ -545,3 +545,61 @@ HAVING COUNT(ThanhPho) > 3
 */
 SELECT SanPham.Ma,SanPham.Ten,ChiTietSP.NamBH,ChiTietSP.SoLuongTon FROM ChiTietSP
 JOIN SanPham ON SanPham.Id =ChiTietSP.IdSP
+-- Nếu mà các bạn để JOIN mặc định sẽ là INNER JOIN
+SELECT SanPham.Ma,SanPham.Ten,ChiTietSP.NamBH,ChiTietSP.SoLuongTon FROM ChiTietSP
+INNER JOIN SanPham ON SanPham.Id =ChiTietSP.IdSP
+
+-- LEFT JOIN
+SELECT Nsx.Ma,Nsx.Ten,ChiTietSP.NamBH,ChiTietSP.SoLuongTon 
+FROM ChiTietSP
+LEFT JOIN Nsx ON Nsx.Id =ChiTietSP.IdNsx
+
+SELECT Nsx.Ma,Nsx.Ten,ChiTietSP.NamBH,ChiTietSP.SoLuongTon 
+FROM Nsx
+LEFT JOIN ChiTietSP ON Nsx.Id =ChiTietSP.IdNsx
+-- Ngoài ra nghiên cứu thêm các kiểu join còn lại.
+/*
+	CÂU LỆNH 3.5: SQL SELECT INTO
+	Câu lệnh SELECT INTO sao chép dữ liệu từ một bảng vào một bảng mới.
+	-- Cú pháp:
+		SELECT *
+		INTO newtable [IN externaldb]
+		FROM oldtable
+		WHERE condition;
+	Chỉ sao chép một số cột vào một bảng mới:
+		SELECT column1, column2, column3, ...
+		INTO newtable [IN externaldb]
+		FROM oldtable
+		WHERE condition;
+*/
+
+/*
+	CÂU LỆNH 3.6: SQL INSERT INTO SELECT
+	Câu lệnh INSERT INTO SELECT sao chép dữ liệu từ một bảng và chèn nó vào một bảng khác.
+	INSERT INTO SELECT yêu cầu các kiểu dữ liệu trong bảng nguồn và bảng đích phải khớp
+	Các bản ghi hiện có trong bảng đích không bị ảnh hưởng
+	-- Cú pháp:
+		Sao chép tất cả các cột từ bảng này sang bảng khác:
+			INSERT INTO table2
+			SELECT * FROM table1
+			WHERE condition;
+		Chỉ sao chép một số cột từ một bảng sang một bảng khác:
+			INSERT INTO table2 (column1, column2, column3, ...)
+			SELECT column1, column2, column3, ...
+			FROM table1
+			WHERE condition;
+*/
+
+/*
+	CÂU LỆNH 3.7: SQL UPDATE 
+	Câu lệnh UPDATE được sử dụng để sửa đổi các bản ghi hiện có trong bảng.	
+	-- Cú pháp:
+		UPDATE table_name
+		SET column1 = value1, column2 = value2, ...
+		WHERE condition;
+*/
+SELECT * FROM NHANVIEN
+UPDATE NhanVien
+SET Ten = N'Long',GioiTinh =N'Nữ'--Khi update hoặc delete nếu không có điều kiện thì nó sẽ set hết giá trị tất cả các bản ghi tại cột chỉ định.
+WHERE Ma = NV13--0928147333
+-- Khi đã sử dụng điều kiện tùy tình huống bài toán thì đưa điều kiện hợp lý.
